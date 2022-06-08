@@ -1,0 +1,31 @@
+.container {
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin: 50px auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* min-width: 50%; */
+}
+
+.searchBar {
+  border: none;
+  /* padding: 10px; */
+}
+
+.searchBar > input {
+  border: none;
+  border-bottom: 1px solid #ededed;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 1rem;
+  color: #ededed;
+  font-weight: 200;
+  -webkit-font-smoothing: antialiased;
+  margin-top: 15px;
+}
+
+.searchBar > input:focus {
+  border-bottom: 1px solid black;
+  color: black;
+  outline: 0;
+}
