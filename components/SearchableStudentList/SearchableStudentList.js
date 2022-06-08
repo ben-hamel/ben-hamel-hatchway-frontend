@@ -8,24 +8,27 @@ function SearchableStudentList() {
   const [tagFilter, setTagFilter] = useState("");
   const [student, setStudent] = useState([]);
 
-  const [curatedStudents, setCuratedStudents] = useState([]);
   useEffect(() => {
     const getData = async () => {
+      // retrieve data from the server
       const response = await fetch(
         "https://api.hatchways.io/assessment/students"
       );
+      // convert the response to json
       const data = await response.json();
-      // console.log("data", data);
 
+      // if no tags property is found, add an empty array
       data.students.forEach((student) => {
         if (!student.tags) {
           student.tags = [];
         }
       });
 
-      // data.students[0].tags = ["tag", "tag2"];
+      // set the data to the state
       setStudent(data.students);
     };
+
+    // call the function to retrieve data
     getData();
   }, []);
 
@@ -52,6 +55,7 @@ function SearchableStudentList() {
         return prevStudents;
       }
 
+      // Add new tag to array
       changedStudent.tags = [...changedStudent.tags, tag];
 
       // Copy array so we can change it
@@ -64,71 +68,8 @@ function SearchableStudentList() {
     });
   };
 
-  // const studentsFilteredByName = student.filter((student) => {
-  //   return (
-  //     student.firstName.toLowerCase().includes(query.toLowerCase()) ||
-  //     student.lastName.toLowerCase().includes(query.toLowerCase())
-  //   );
-  // });
-
-  // const studentsFilteredByTag = student.filter((student) => {
-  //   //loop over student tags and check if it includes the tagFilter
-  //   // return student.tags.includes(tagFilter);
-  //   return student.tags.some((tag) => tag.toLowerCase().includes(tagFilter));
-  // });
-
-  function filterItems(arr, test) {
-    return arr.filter(function (el) {
-      return el.toLowerCase().indexOf(test.toLowerCase()) !== -1;
-    });
-  }
-
-  const handleFilter = (e) => {
-    const filteredStudents = student.filter((student) => {
-      const containsStudentName = `${student.firstName} ${student.lastName}`
-        .toLowerCase()
-        .includes(query.toLowerCase());
-      const containsStudentTag = student.tags.some((tag) =>
-        tag.toLowerCase().includes(tagFilter.toLowerCase())
-      );
-      // return containsStudentName || containsStudentTag;
-
-      if (query && tagFilter) {
-        // if name and note filters are used, return the result of the above boolean values
-        return containsStudentName && containsStudentTag;
-      } else if (
-        (query && containsStudentName) ||
-        (tagFilter && containsStudentTag)
-      ) {
-        // else if name and containsStudentName are a match or if note and containsStudentNote are a match, keep record
-        return true;
-      } else {
-        // else, discard record
-        return student;
-      }
-    });
-
-    setCuratedStudents(filteredStudents);
-  };
-
-  const filteredData = student.filter(
-    (dataObj) =>
-      dataObj.firstName.indexOf(query) !== -1 &&
-      dataObj.lastName.indexOf(query) !== -1 &&
-      dataObj.tags.indexOf(tagFilter) !== -1
-  );
-
   return (
     <div className={styles.container}>
-      <button onClick={() => console.log("student", studentsFilteredByName)}>
-        student
-      </button>
-      <button onClick={() => console.log(tagFilter)}>tagFilter</button>
-      <button
-        onClick={() => console.log("studentsFilteredByTag", handleFilter)}
-      >
-        studentsFilteredByTag
-      </button>
       <div className={styles.searchBar}>
         <input
           placeholder="Search by name"
@@ -143,25 +84,27 @@ function SearchableStudentList() {
       {student
         .filter((student, index) => {
           if (query === "" && tagFilter == "") {
+            // If there is no query and no tag filter, show all students
             return student;
           } else {
+            // Filter by name
             const containsStudentName =
               `${student.firstName} ${student.lastName}`
                 .toLowerCase()
                 .includes(query.toLowerCase());
+            // Filter by tag
             const containsStudentTag = student.tags.some((tag) =>
               tag.toLowerCase().includes(tagFilter.toLowerCase())
             );
-            // return containsStudentName || containsStudentTag;
 
             if (query && tagFilter) {
-              // if name and note filters are used, return the result of the above boolean values
+              // If the student contains the query and the tag filter, show them
               return containsStudentName && containsStudentTag;
             } else if (
               (query && containsStudentName) ||
               (tagFilter && containsStudentTag)
             ) {
-              // else if name and containsStudentName are a match or if note and containsStudentNote are a match, keep record
+              // If the student contains the query or the tag filter, show them
               return true;
             }
           }

@@ -112,5 +112,10 @@
   .grid {
     width: 100%;
     flex-direction: column;
+    /* padding: 0; */
+  }
+
+  .container {
+    padding: 0;
   }
 }

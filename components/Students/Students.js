@@ -34,13 +34,11 @@ function Students({ student, handleTagAdded }) {
     );
   };
 
+  /**
+   *  pass the tag to the parent component
+   */
   const addTag = (e) => {
-    // console.log("add tag launched", e.target.value);
-    // console.log("e", e);
     if (e.key === "Enter") {
-      // setTag([...tag, e.target.value]);
-      // console.log("id", student.id);
-      // console.log("tag target", e.target.value);
       handleTagAdded(e.target.value, student.id);
       e.target.value = "";
     }
@@ -87,20 +85,30 @@ function Students({ student, handleTagAdded }) {
             <li>Company: {student.company}</li>
             <li>Skill: {student.skill}</li>
             <li>Average: {calcAverages(student.grades)}%</li>
-            <div className={styles.gradesList}>
-              {showGrades ? (
-                <ShowGrades
-                  data={student.grades}
-                  className={styles.gradeList}
-                />
-              ) : null}
-            </div>
 
-            {student.tags.map((tag, index) => (
-              <div key={index}>{tag}</div>
-            ))}
-            <input onKeyDown={addTag} />
-            <button onClick={() => console.log(student.tags)}>Check Tag</button>
+            {showGrades ? (
+              <div className={styles.gradesList}>
+                <ShowGrades data={student.grades} />
+              </div>
+            ) : null}
+
+            {student.tags.length > 0 ? (
+              <div className={styles.tagsContainer}>
+                {student.tags.map((tag, index) => (
+                  <div className={styles.tag} key={index}>
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            <div className={styles.tagInput}>
+              <input
+                // className={styles.tagInput}
+                onKeyDown={addTag}
+                placeholder="Search by tag"
+              />
+            </div>
           </ul>
         </div>
       </div>
